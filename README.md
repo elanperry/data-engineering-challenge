@@ -43,10 +43,10 @@ Database schema design is outlined in the pdf files found under `schema-designs`
 This will return all records for a given endpoint in JSON format.
 
 Potential endpoints include:
-	sales: "sales" records.
-	vehicles: "vehicles" records.
-	stores: "stores" records.
-	vehicles_sold: "JOIN" operation on all 3 tables, resembles data from the original csv file. 
++ sales: "sales" records.
++ vehicles: "vehicles" records.
++ stores: "stores" records.
++ vehicles_sold: "JOIN" operation on all 3 tables, resembles data from the original csv file. 
 
 #### 'GET' Filter 
 
@@ -59,9 +59,9 @@ Parameters can be specified and added to the end of the URL.
 Example:`localhost:5000/api/v1/resources/sales?id=9&purch_val=9000&sale_loc=9`
 
 Parameters:
-	id: optional
-	purch_val: optional
-	sale_loc: optional
++ id: optional
++ purch_val: optional
++ sale_loc: optional
 
 Potential endpoints include:
 	sales: "sales" records.
@@ -94,35 +94,35 @@ This will insert new records for a given endpoint based on query parameters.
 Parameters can be specified and added to the end of the URL.
 
 Potential endpoints include:
-	sales: "sales" records.
-	vehicles: "vehicles" records.
-	stores: "stores" records.
++ sales: "sales" records.
++ vehicles: "vehicles" records.
++ stores: "stores" records.
 
 #### 'POST' Insert Sale Record
 
 Parameters:
-	vin: *required*
-	location_num: *required*
-	purch_val: optional
-	sale_loc: optional
-	odometer: optional
-	color_sold: optional
++ vin: *required*
++ location_num: *required*
++ purch_val: optional
++ sale_loc: optional
++ odometer: optional
++ color_sold: optional
 
 #### 'POST' Insert Vehicle Record
 
 Parameters:
-	vin: optional
-    	car_year: optional
-    	color: optional
-    	make: optional
-    	veh_body: optional
-    	engine_type: optional
-    	engine_liters: optional
-    	car_type: optional
-    	brand: optional
-    	veh_type: optional
-    	fuel_type: optional
-    	transmission: optional 
++ vin: optional
++ car_year: optional
++ color: optional
++ make: optional
++ veh_body: optional
++ engine_type: optional
++ engine_liters: optional
++ car_type: optional
++ brand: optional
++ veh_type: optional
++ fuel_type: optional
++ transmission: optional 
  
 #### 'POST' Insert Store Record
 
@@ -138,34 +138,34 @@ This will existing records for a given endpoint based on query parameters.
 Parameters can be specified and added to the end of the URL.
 
 Potential endpoints include:
-	sales: "sales" records.
-	vehicles: "vehicles" records.
++ sales: "sales" records.
++ vehicles: "vehicles" records.
 
 #### 'PUT' Update Sale Record
 
 Parameters:
-	id: *required*
-	purch_val: optional
-	sale_loc: optional
-	odometer: optional
-	color_sold: optional
++ id: *required*
++ purch_val: optional
++ sale_loc: optional
++ odometer: optional
++ color_sold: optional
 
 #### 'PUT' Insert Vehicle Record
 
 Parameters:
-	id: *required*
-	vin: optional
-    	car_year: optional
-    	color: optional
-    	make: optional
-    	veh_body: optional
-    	engine_type: optional
-    	engine_liters: optional
-    	car_type: optional
-    	brand: optional
-    	veh_type: optional
-    	fuel_type: optional
-    	transmission: optional
++ id: *required*
++ vin: optional
++ car_year: optional
++ color: optional
++ make: optional
++ veh_body: optional
++ engine_type: optional
++ engine_liters: optional
++ car_type: optional
++ brand: optional
++ veh_type: optional
++ fuel_type: optional
++ transmission: optional
 
 ### 'DELETE' Methods
 
@@ -176,12 +176,12 @@ This will delete existing records for a given endpoint based on query parameters
 Parameters can be specified and added to the end of the URL.
 
 Potential endpoints include:
-	sales: "sales" records.
++ sales: "sales" records.
 
 #### 'DELETE' Delete Sale Record
 
 Parameters:
-	id: *required*
++ id: *required*
 
 # Data Engineering Code Challenge	
 
