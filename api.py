@@ -8,7 +8,7 @@ app.config["DEBUG"] = True
 	
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Car Sales Data</h1>
+    return '''<h1>Used Car Sales Data</h1>
 <p>A prototype API for used car sales data.</p>'''
 
 @app.errorhandler(404)
@@ -69,7 +69,6 @@ def sales_filter():
     query_parameters = request.args
 
     id = query_parameters.get('id')
-    print(id)
     purch_val = query_parameters.get('purch_val')
     sale_loc = query_parameters.get('sale_loc')
 
@@ -383,4 +382,5 @@ if __name__ == '__main__':
         conn = sqlite3.connect('file:used_cars.db?mode=rw', uri=True)
     except:
         db.create_db()
+
     app.run()

@@ -1,5 +1,190 @@
 # Data Engineering Code Challenge
 
+## My Solution
+
+The API was made using Python and Flask and a SQLite database. Since the intended userbase for the API is other developers, the front end is very basic and interaction is conducted through REQUESTS. This sets up a framework for which developers can fetch JSON formatted data from the database and utilize it in their own applications. 
+
+### Installation
+
+#### Docker
+
+To deploy the app to a docker container first build the image using:
+
+`sudo docker build -t used-cars-api:latest .`
+
+You can then deply a container with:
+
+`sudo docker run --net host -p 5000:5000 used-cars-api`
+
+From here you should be able to navigate to `localhost:5000` if working correctly, you will see a landing page with "Used Car Sales Data" at the top.
+
+#### If not using Docker
+
+You will need python3 installed on your system, install dependencies using `pip install -r requirements.txt` and launch the app through `api.py`
+
+From here you should be able to navigate to `localhost:5000` if working correctly, you will see a landing page with "Used Car Sales Data" at the top. 
+
+## My Approach
+
+I started this challenge with some exploration of the dataset, this process is detailed in the jupyter notebook `data-exploration.ipynb`. As stated in the challenge description, this dataset is quite messy. I designed some ETL steps to clean up the data and prepare it for insertion in the SQLite database. In summary, there appeared to be lots of duplicated records in the csv file, as if someone had accidentally copy pasted the entire contents into the middle of the file. I decided to remove the duplicated data then performed some standard cleaning operations such as standardizing string case, stripping off extra whitespace etc... These methods can be found in `etl.py` which gets called by the `create_db()` method in `db.py`. Upon initialization, Flask also uses these methods to create the SQLite database if one does not exist.
+
+The Flask API server is launched using `api.py` and is exposed on port 5000 by default. It can be accessed via URL, in browser or using `curl` for example. Data is returned in JSON format.
+
+Database schema design is outlined in the pdf files found under `schema-designs`. I realized late into the challenge that my design could be improved, at that point I was too far into the challenge to implement the redesign into the API. However, I would argue that the original design is a workable solution for the current dataset. The redesigned schema would scale more effectively and could accomodate additional datapoints I could forsee being added in the future.
+
+## API Documentation
+
+### 'GET' Methods
+
+#### 'GET' All 
+
+`/api/v1/resources/{endpoint}/all`
+
+This will return all records for a given endpoint in JSON format.
+
+Potential endpoints include:
+	sales: "sales" records.
+	vehicles: "vehicles" records.
+	stores: "stores" records.
+	vehicles_sold: "JOIN" operation on all 3 tables, resembles data from the original csv file. 
+
+#### 'GET' Filter 
+
+`/api/v1/resources/{endpoint}`
+
+This will return filtered records for a given endpoint based on query parameters in JSON format.
+
+Parameters can be specified and added to the end of the URL. 
+
+Example:`localhost:5000/api/v1/resources/sales?id=9&purch_val=9000&sale_loc=9`
+
+Parameters:
+	id: optional
+	purch_val: optional
+	sale_loc: optional
+
+Potential endpoints include:
+	sales: "sales" records.
+
+#### 'GET' COUNT 
+
+`/api/v1/resources/{endpoint}/count/{method}`
+
+This will return counts for a given endpoint based on an aggregate method.
+
+Examples:
+`/api/v1/resources/sales/count/by_store`: returns count of sales grouped by store location. 
+`/api/v1/resources/vehicles_sold/count/by_brand`: returns count of vehicles sold grouped by vehicle brand.
+
+#### 'GET' AVERAGE 
+
+`/api/v1/resources/{endpoint}/average/{method}`
+
+This will return counts for a given endpoint based on an aggregate method.
+
+Examples:
+`/api/v1/resources/sales/average/purchase_by_store`: returns average purchase price grouped by store location.
+
+### 'POST' Methods
+
+`/api/v1/resources/{endpoint}/insert`
+
+This will insert new records for a given endpoint based on query parameters.
+
+Parameters can be specified and added to the end of the URL.
+
+Potential endpoints include:
+	sales: "sales" records.
+	vehicles: "vehicles" records.
+	stores: "stores" records.
+
+#### 'POST' Insert Sale Record
+
+Parameters:
+	vin: *required*
+	location_num: *required*
+	purch_val: optional
+	sale_loc: optional
+	odometer: optional
+	color_sold: optional
+
+#### 'POST' Insert Vehicle Record
+
+Parameters:
+	vin: optional
+    	car_year: optional
+    	color: optional
+    	make: optional
+    	veh_body: optional
+    	engine_type: optional
+    	engine_liters: optional
+    	car_type: optional
+    	brand: optional
+    	veh_type: optional
+    	fuel_type: optional
+    	transmission: optional 
+ 
+#### 'POST' Insert Store Record
+
+Parameters:
+	location_num: optional
+ 
+### 'PUT' Methods
+
+`/api/v1/resources/{endpoint}/update`
+
+This will existing records for a given endpoint based on query parameters.
+
+Parameters can be specified and added to the end of the URL.
+
+Potential endpoints include:
+	sales: "sales" records.
+	vehicles: "vehicles" records.
+
+#### 'PUT' Update Sale Record
+
+Parameters:
+	id: *required*
+	purch_val: optional
+	sale_loc: optional
+	odometer: optional
+	color_sold: optional
+
+#### 'PUT' Insert Vehicle Record
+
+Parameters:
+	id: *required*
+	vin: optional
+    	car_year: optional
+    	color: optional
+    	make: optional
+    	veh_body: optional
+    	engine_type: optional
+    	engine_liters: optional
+    	car_type: optional
+    	brand: optional
+    	veh_type: optional
+    	fuel_type: optional
+    	transmission: optional
+
+### 'DELETE' Methods
+
+`/api/v1/resources/{endpoint}/delete`
+
+This will delete existing records for a given endpoint based on query parameters.
+
+Parameters can be specified and added to the end of the URL.
+
+Potential endpoints include:
+	sales: "sales" records.
+
+#### 'DELETE' Delete Sale Record
+
+Parameters:
+	id: *required*
+
+# Data Engineering Code Challenge	
+
 ## Introduction
 
 Imagine that you work in the technology department of used car dealership chain and you've been tasked to develop a solution
@@ -33,46 +218,6 @@ A few notes:
 * Focus on how you'd design a schema that enables evolution over time with minimal overhead
 * Keep performance considerations in mind when designing indexes, and make sure to document the trade-offs that your decisions will entail
 
-
-#### Helpful tips
-
-As you work, consider how you might productionize your solution to work in a cloud environment. We work a lot with Docker, 
-so bonus point if you decide to include it in the submission. 
-
-Keep note of any challenges or blockers you encounter as you work and be ready to discuss your development work flow, 
-including things you tried and lessons you've learned as you completed the code challenge. 
-
-Finally, be creative and have fun! :smiley:
-
-## Deliverables
-
-#### What deliverables do I submit?
-
-Please submit the following deliverables to complete this code challenge: 
-
-* A `README.md` file containing the following items:
-    * Thorough instructions on how to run your solution. This could be things like how to install dependencies, 
-    a single docker command, or whatever else is needed to be able to interact with your solution
-    * An explanation of the components of the solution. At a minimum, it should briefly document how the API is structured and
-    what methods each endpoint allows. If there are any ETL steps that you designed prior to loading the data into the database,
-    make sure to include that as well
-* The actual submission code, with all that's needed to run it
-
-
-#### How do I submit my deliverables?
-
-Please archive all of your deliverables into a single compressed file and save the file using the file naming convention shown below. Please substitute your first name for *FIRST_NAME*, last name for *LAST_NAME*, and the year (*YY*), month (*MM*), and date (*DD*) when you submitted your code challenge.
-
-*FIRST_NAME-LAST_NAME-YYMMDD-data-engineering-code-challenge*
-
-#### When do I submit my deliverables?
-
-Please submit your solution within 1 week (7 days) of receiving the code challenge. If you require more time, drop us a line at [DataScienceU@u.group](DataScienceU@u.group). Let us know why you need more time, and how much more time you'll need to complete the challenge.
-
-#### Where do I submit my deliverables?
-
-Please send your completed code challenge to [DataScienceU@u.group](DataScienceU@u.group).
-
 ## Data
 
 The [data](data/data_engineering_dataset.csv) you will use for this code challenge is a historical snapshot of vehicles that have been sold by a used car dealership across multiple stores. 
@@ -100,7 +245,3 @@ The [data](data/data_engineering_dataset.csv) you will use for this code challen
 | SaleLoc         | ID number of dealership that sold vehicle          |
 | PurchVal        | Purchase price of vehicle                          |
 
-
-## Questions
-
-Please send all questions about the code challenge to [DataScienceU@u.group](DataScienceU@u.group).
